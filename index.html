@@ -32,31 +32,31 @@
 <p>This is an early stage project so far. Feel free to contribute.</p>
 
 <ul>
-<li><a href="http://richardknop.github.io/machinery/#first-steps">First Steps</a></li>
-<li><a href="http://richardknop.github.io/machinery/#configuration">Configuration</a></li>
-<li><a href="http://richardknop.github.io/machinery/#server">Server</a></li>
-<li><a href="http://richardknop.github.io/machinery/#workers">Workers</a></li>
+<li><a href="https://github.com/RichardKnop/machinery#first-steps">First Steps</a></li>
+<li><a href="https://github.com/RichardKnop/machinery#configuration">Configuration</a></li>
+<li><a href="https://github.com/RichardKnop/machinery#server">Server</a></li>
+<li><a href="https://github.com/RichardKnop/machinery#workers">Workers</a></li>
 <li>
-<a href="http://richardknop.github.io/machinery/#tasks">Tasks</a>
+<a href="https://github.com/RichardKnop/machinery#tasks">Tasks</a>
 
 <ul>
-<li><a href="http://richardknop.github.io/machinery/#registering-tasks">Registering Tasks</a></li>
-<li><a href="http://richardknop.github.io/machinery/#signatures">Signatures</a></li>
-<li><a href="http://richardknop.github.io/machinery/#supported-types">Supported Types</a></li>
-<li><a href="http://richardknop.github.io/machinery/#sending-tasks">Sending Tasks</a></li>
-<li><a href="http://richardknop.github.io/machinery/#keeping-results">Keeping Results</a></li>
+<li><a href="https://github.com/RichardKnop/machinery#registering-tasks">Registering Tasks</a></li>
+<li><a href="https://github.com/RichardKnop/machinery#signatures">Signatures</a></li>
+<li><a href="https://github.com/RichardKnop/machinery#supported-types">Supported Types</a></li>
+<li><a href="https://github.com/RichardKnop/machinery#sending-tasks">Sending Tasks</a></li>
+<li><a href="https://github.com/RichardKnop/machinery#keeping-results">Keeping Results</a></li>
 </ul>
 </li>
 <li>
-<a href="http://richardknop.github.io/machinery/#workflows">Workflows</a>
+<a href="https://github.com/RichardKnop/machinery#workflows">Workflows</a>
 
 <ul>
-<li><a href="http://richardknop.github.io/machinery/#groups">Groups</a></li>
-<li><a href="http://richardknop.github.io/machinery/#chords">Chords</a></li>
-<li><a href="http://richardknop.github.io/machinery/#chains">Chains</a></li>
+<li><a href="https://github.com/RichardKnop/machinery#groups">Groups</a></li>
+<li><a href="https://github.com/RichardKnop/machinery#chords">Chords</a></li>
+<li><a href="https://github.com/RichardKnop/machinery#chains">Chains</a></li>
 </ul>
 </li>
-<li><a href="http://richardknop.github.io/machinery/#development-setup">Development Setup</a></li>
+<li><a href="https://github.com/RichardKnop/machinery#development-setup">Development Setup</a></li>
 </ul>
 
 <h2>
@@ -123,10 +123,14 @@
 <p>Currently supported backends are:</p>
 
 <ul>
-<li>AMQP (use AMQP URL such as <code>amqp://guest:guest@localhost:5672/</code>)</li>
 <li>Redis (use Redis URL such as <code>redis://127.0.0.1:6379</code>)</li>
 <li>Memcache (use Memcache URL such as <code>memcache://10.0.0.1:11211,10.0.0.2:11211</code>)</li>
+<li>AMQP (use AMQP URL such as <code>amqp://guest:guest@localhost:5672/</code>)</li>
 </ul>
+
+<blockquote>
+<p>Keep in mind AMQP is not recommended as a result backend. See <a href="https://github.com/RichardKnop/machinery#keeping-results">Keeping Results</a></p>
+</blockquote>
 
 <h3>
 <a id="resultsexpirein" class="anchor" href="#resultsexpirein" aria-hidden="true"><span class="octicon octicon-link"></span></a>ResultsExpireIn</h3>
