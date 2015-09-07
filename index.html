@@ -378,17 +378,16 @@ server.<span class="pl-c1">RegisterTask</span>(<span class="pl-s"><span class="p
     <span class="pl-v">Error</span>    <span class="pl-k">string</span>
 }
 
-<span class="pl-k">type</span> <span class="pl-v">TaskStateGroup</span> <span class="pl-k">struct</span> {
-    <span class="pl-v">GroupUUID</span>      <span class="pl-k">string</span>
-    <span class="pl-v">GroupTaskCount</span> <span class="pl-k">int</span>
-    <span class="pl-v">States</span>         <span class="pl-k">map</span>[<span class="pl-k">string</span>]TaskState
+<span class="pl-k">type</span> <span class="pl-v">GroupMeta</span> <span class="pl-k">struct</span> {
+    <span class="pl-v">GroupUUID</span> <span class="pl-k">string</span>
+    <span class="pl-v">TaskUUIDs</span> []<span class="pl-k">string</span>
 }</pre></div>
 
 <p><code>TaskResult</code> represents a return value of a processed task.</p>
 
 <p><code>TaskState</code> struct will be serialised and stored every time a task state changes.</p>
 
-<p><code>TaskStateGroup</code> is used for keeping a state of group of tasks.</p>
+<p><code>GroupMeta</code> stores useful metadata about tasks within the same group. E.g. UUIDs of all tasks which are used in order to check if all tasks completed successfully or not and thus whether to trigger chord callback.</p>
 
 <p><code>AsyncResult</code> object allows you to check for the state of a task:</p>
 
