@@ -79,7 +79,7 @@
 <pre><code>$ go run _examples/worker/worker.go
 </code></pre>
 
-<p><img src="https://raw.githubusercontent.com/RichardKnop/machinery/master/assets/example_worker.png" alt="Example worker"></p>
+<p><img src="https://raw.githubusercontent.com/RichardKnop/assets/master/machinery/example_worker.png" alt="Example worker"></p>
 
 <p>Finally, once you have a worker running and waiting for tasks to consume, send some tasks:</p>
 
@@ -88,14 +88,14 @@
 
 <p>You will be able to see the tasks being processed asynchronously by the worker:</p>
 
-<p><img src="https://raw.githubusercontent.com/RichardKnop/machinery/master/assets/example_worker_receives_tasks.png" alt="Example worker receives tasks"></p>
+<p><img src="https://raw.githubusercontent.com/RichardKnop/assets/master/machinery/example_worker_receives_tasks.png" alt="Example worker receives tasks"></p>
 
 <h2>
 <a id="configuration" class="anchor" href="#configuration" aria-hidden="true"><span class="octicon octicon-link"></span></a>Configuration</h2>
 
 <p>Machinery has several configuration options. Configuration is encapsulated by a <code>Config</code> struct and injected as a dependency to objects that need it.</p>
 
-<div class="highlight highlight-go"><pre><span class="pl-k">type</span> <span class="pl-v">Config</span> <span class="pl-k">struct</span> {
+<div class="highlight highlight-source-go"><pre><span class="pl-k">type</span> <span class="pl-v">Config</span> <span class="pl-k">struct</span> {
     <span class="pl-v">Broker</span>          <span class="pl-k">string</span> <span class="pl-s"><span class="pl-pds">`</span>yaml:"broker"<span class="pl-pds">`</span></span>
     <span class="pl-v">ResultBackend</span>   <span class="pl-k">string</span> <span class="pl-s"><span class="pl-pds">`</span>yaml:"result_backend"<span class="pl-pds">`</span></span>
     <span class="pl-v">ResultsExpireIn</span> <span class="pl-k">int</span>    <span class="pl-s"><span class="pl-pds">`</span>yaml:"results_expire_in"<span class="pl-pds">`</span></span>
@@ -162,7 +162,7 @@
 
 <p>A Machinery library must be instantiated before use. The way this is done is by creating a <code>Server</code> instance. <code>Server</code> is a base object which stores Machinery configuration and registered tasks. E.g.:</p>
 
-<div class="highlight highlight-go"><pre>
+<div class="highlight highlight-source-go"><pre>
 <span class="pl-k">import</span> (
     <span class="pl-s"><span class="pl-pds">"</span>github.com/RichardKnop/machinery/v1/config<span class="pl-pds">"</span></span>
     machinery <span class="pl-s"><span class="pl-pds">"</span>github.com/RichardKnop/machinery/v1<span class="pl-pds">"</span></span>
@@ -187,7 +187,7 @@
 
 <p>In order to consume tasks, you need to have one or more workers running. All you need to run a worker is a <code>Server</code> instance with registered tasks. E.g.:</p>
 
-<div class="highlight highlight-go"><pre><span class="pl-smi">worker</span> <span class="pl-k">:=</span> server.<span class="pl-c1">NewWorker</span>(<span class="pl-s"><span class="pl-pds">"</span>worker_name<span class="pl-pds">"</span></span>)
+<div class="highlight highlight-source-go"><pre><span class="pl-smi">worker</span> <span class="pl-k">:=</span> server.<span class="pl-c1">NewWorker</span>(<span class="pl-s"><span class="pl-pds">"</span>worker_name<span class="pl-pds">"</span></span>)
 <span class="pl-smi">err</span> <span class="pl-k">:=</span> worker.<span class="pl-c1">Launch</span>()
 <span class="pl-k">if</span> err != <span class="pl-c1">nil</span> {
     <span class="pl-c">// do something with the error</span>
@@ -200,7 +200,7 @@
 
 <p>Tasks are a building block of Machinery applications. A task is a function which defines what happens when a worker receives a message. Let's say we want to define tasks for adding and multiplying numbers:</p>
 
-<div class="highlight highlight-go"><pre><span class="pl-k">func</span> <span class="pl-en">Add</span>(<span class="pl-v">args</span> ...<span class="pl-v">int64</span>) (<span class="pl-v">int64</span>, <span class="pl-v">error</span>) {
+<div class="highlight highlight-source-go"><pre><span class="pl-k">func</span> <span class="pl-en">Add</span>(<span class="pl-v">args</span> ...<span class="pl-v">int64</span>) (<span class="pl-v">int64</span>, <span class="pl-v">error</span>) {
     <span class="pl-smi">sum</span> <span class="pl-k">:=</span> <span class="pl-c1">int64</span>(<span class="pl-c1">0</span>)
     <span class="pl-k">for</span> <span class="pl-smi">_</span>, <span class="pl-smi">arg</span> <span class="pl-k">:=</span> <span class="pl-k">range</span> args {
         sum += arg
@@ -221,19 +221,19 @@
 
 <p>Before your workers can consume a task, you need to register it with the server. This is done by assigning a task a unique name:</p>
 
-<div class="highlight highlight-go"><pre>server.<span class="pl-c1">RegisterTasks</span>(<span class="pl-k">map</span>[<span class="pl-k">string</span>]<span class="pl-k">interface</span>{}{
+<div class="highlight highlight-source-go"><pre>server.<span class="pl-c1">RegisterTasks</span>(<span class="pl-k">map</span>[<span class="pl-k">string</span>]<span class="pl-k">interface</span>{}{
     <span class="pl-s"><span class="pl-pds">"</span>add<span class="pl-pds">"</span></span>:      <span class="pl-v">Add</span>,
     <span class="pl-s"><span class="pl-pds">"</span>multiply<span class="pl-pds">"</span></span>: <span class="pl-v">Multiply</span>,
 })</pre></div>
 
 <p>Task can also be registered one by one:</p>
 
-<div class="highlight highlight-go"><pre>server.<span class="pl-c1">RegisterTask</span>(<span class="pl-s"><span class="pl-pds">"</span>add<span class="pl-pds">"</span></span>, <span class="pl-v">Add</span>)
+<div class="highlight highlight-source-go"><pre>server.<span class="pl-c1">RegisterTask</span>(<span class="pl-s"><span class="pl-pds">"</span>add<span class="pl-pds">"</span></span>, <span class="pl-v">Add</span>)
 server.<span class="pl-c1">RegisterTask</span>(<span class="pl-s"><span class="pl-pds">"</span>multiply<span class="pl-pds">"</span></span>, <span class="pl-v">Multiply</span>)</pre></div>
 
 <p>Simply put, when a worker receives a message like this:</p>
 
-<div class="highlight highlight-json"><pre>{
+<div class="highlight highlight-source-json"><pre>{
     <span class="pl-s"><span class="pl-pds">"</span>UUID<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>48760a1a-8576-4536-973b-da09048c2ac5<span class="pl-pds">"</span></span>,
     <span class="pl-s"><span class="pl-pds">"</span>Name<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>add<span class="pl-pds">"</span></span>,
     <span class="pl-s"><span class="pl-pds">"</span>RoutingKey<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span><span class="pl-pds">"</span></span>,
@@ -264,7 +264,7 @@ server.<span class="pl-c1">RegisterTask</span>(<span class="pl-s"><span class="p
 
 <p>A signature wraps calling arguments, execution options (such as immutability) and success/error callbacks of a task so it can be sent across the wire to workers. Task signatures implement a simple interface:</p>
 
-<div class="highlight highlight-go"><pre><span class="pl-k">type</span> <span class="pl-v">TaskArg</span> <span class="pl-k">struct</span> {
+<div class="highlight highlight-source-go"><pre><span class="pl-k">type</span> <span class="pl-v">TaskArg</span> <span class="pl-k">struct</span> {
     <span class="pl-v">Type</span>  <span class="pl-k">string</span>
     <span class="pl-v">Value</span> <span class="pl-k">interface</span>{}
 }
@@ -327,7 +327,7 @@ server.<span class="pl-c1">RegisterTask</span>(<span class="pl-s"><span class="p
 
 <p>Tasks can be called by passing an instance of <code>TaskSignature</code> to an <code>Server</code> instance. E.g:</p>
 
-<div class="highlight highlight-go"><pre><span class="pl-k">import</span> <span class="pl-s"><span class="pl-pds">"</span>github.com/RichardKnop/machinery/v1/signatures<span class="pl-pds">"</span></span>
+<div class="highlight highlight-source-go"><pre><span class="pl-k">import</span> <span class="pl-s"><span class="pl-pds">"</span>github.com/RichardKnop/machinery/v1/signatures<span class="pl-pds">"</span></span>
 
 <span class="pl-smi">task</span> <span class="pl-k">:=</span> signatures.<span class="pl-smi">TaskSignature</span>{
     <span class="pl-v">Name</span>: <span class="pl-s"><span class="pl-pds">"</span>add<span class="pl-pds">"</span></span>,
@@ -354,7 +354,7 @@ server.<span class="pl-c1">RegisterTask</span>(<span class="pl-s"><span class="p
 
 <p>If you configure a result backend, the task states and results will be persisted. Possible states:</p>
 
-<div class="highlight highlight-go"><pre><span class="pl-k">const</span> (
+<div class="highlight highlight-source-go"><pre><span class="pl-k">const</span> (
     <span class="pl-v">PendingState</span>  = <span class="pl-s"><span class="pl-pds">"</span>PENDING<span class="pl-pds">"</span></span>
     <span class="pl-v">ReceivedState</span> = <span class="pl-s"><span class="pl-pds">"</span>RECEIVED<span class="pl-pds">"</span></span>
     <span class="pl-v">StartedState</span>  = <span class="pl-s"><span class="pl-pds">"</span>STARTED<span class="pl-pds">"</span></span>
@@ -366,7 +366,7 @@ server.<span class="pl-c1">RegisterTask</span>(<span class="pl-s"><span class="p
 <p>When using AMQP as a result backend, task states will be persisted in separate queues for each task. Although RabbitMQ can scale up to thousands of queues, it is strongly advised to use a better suited result backend (e.g. Memcache) when you are expecting to run a large number of parallel tasks.</p>
 </blockquote>
 
-<div class="highlight highlight-go"><pre><span class="pl-k">type</span> <span class="pl-v">TaskResult</span> <span class="pl-k">struct</span> {
+<div class="highlight highlight-source-go"><pre><span class="pl-k">type</span> <span class="pl-v">TaskResult</span> <span class="pl-k">struct</span> {
     <span class="pl-v">Type</span>  <span class="pl-k">string</span>
     <span class="pl-v">Value</span> <span class="pl-k">interface</span>{}
 }
@@ -391,19 +391,19 @@ server.<span class="pl-c1">RegisterTask</span>(<span class="pl-s"><span class="p
 
 <p><code>AsyncResult</code> object allows you to check for the state of a task:</p>
 
-<div class="highlight highlight-go"><pre><span class="pl-smi">taskState</span> <span class="pl-k">:=</span> asyncResult.<span class="pl-c1">GetState</span>()
+<div class="highlight highlight-source-go"><pre><span class="pl-smi">taskState</span> <span class="pl-k">:=</span> asyncResult.<span class="pl-c1">GetState</span>()
 fmt.<span class="pl-c1">Printf</span>(<span class="pl-s"><span class="pl-pds">"</span>Current state of <span class="pl-c1">%v</span> task is:<span class="pl-cce">\n</span><span class="pl-pds">"</span></span>, taskState.<span class="pl-smi">TaskUUID</span>)
 fmt.<span class="pl-c1">Println</span>(taskState.<span class="pl-smi">State</span>)</pre></div>
 
 <p>There are couple of convenient me methods to inspect the task status:</p>
 
-<div class="highlight highlight-go"><pre>asyncResult.<span class="pl-c1">GetState</span>().<span class="pl-c1">IsCompleted</span>()
+<div class="highlight highlight-source-go"><pre>asyncResult.<span class="pl-c1">GetState</span>().<span class="pl-c1">IsCompleted</span>()
 asyncResult.<span class="pl-c1">GetState</span>().<span class="pl-c1">IsSuccess</span>()
 asyncResult.<span class="pl-c1">GetState</span>().<span class="pl-c1">IsFailure</span>()</pre></div>
 
 <p>You can also do a synchronous blocking call to wait for a task result:</p>
 
-<div class="highlight highlight-go"><pre><span class="pl-smi">result</span>, <span class="pl-smi">err</span> <span class="pl-k">:=</span> asyncResult.<span class="pl-c1">Get</span>()
+<div class="highlight highlight-source-go"><pre><span class="pl-smi">result</span>, <span class="pl-smi">err</span> <span class="pl-k">:=</span> asyncResult.<span class="pl-c1">Get</span>()
 <span class="pl-k">if</span> err != <span class="pl-c1">nil</span> {
     <span class="pl-c">// getting result of a task failed</span>
     <span class="pl-c">// do something with the error</span>
@@ -420,7 +420,7 @@ fmt.<span class="pl-c1">Println</span>(result.<span class="pl-c1">Interface</spa
 
 <p><code>Group</code> is a set of tasks which will be executed in parallel, independent of each other. E.g.:</p>
 
-<div class="highlight highlight-go"><pre><span class="pl-k">import</span> (
+<div class="highlight highlight-source-go"><pre><span class="pl-k">import</span> (
     <span class="pl-s"><span class="pl-pds">"</span>github.com/RichardKnop/machinery/v1/signatures<span class="pl-pds">"</span></span>
     machinery <span class="pl-s"><span class="pl-pds">"</span>github.com/RichardKnop/machinery/v1<span class="pl-pds">"</span></span>
 )
@@ -462,7 +462,7 @@ fmt.<span class="pl-c1">Println</span>(result.<span class="pl-c1">Interface</spa
 
 <p><code>SendGroup</code> returns a slice of <code>AsyncResult</code> objects. So you can do a blocking call and wait for the result of groups tasks:</p>
 
-<div class="highlight highlight-go"><pre><span class="pl-k">for</span> <span class="pl-smi">_</span>, <span class="pl-smi">asyncResult</span> <span class="pl-k">:=</span> <span class="pl-k">range</span> asyncResults {
+<div class="highlight highlight-source-go"><pre><span class="pl-k">for</span> <span class="pl-smi">_</span>, <span class="pl-smi">asyncResult</span> <span class="pl-k">:=</span> <span class="pl-k">range</span> asyncResults {
     <span class="pl-smi">result</span>, <span class="pl-smi">err</span> <span class="pl-k">:=</span> asyncResult.<span class="pl-c1">Get</span>()
     <span class="pl-k">if</span> err != <span class="pl-c1">nil</span> {
         <span class="pl-c">// getting result of a task failed</span>
@@ -476,7 +476,7 @@ fmt.<span class="pl-c1">Println</span>(result.<span class="pl-c1">Interface</spa
 
 <p><code>Chord</code> allows you to define a callback to be executed after all tasks in a group finished processing, e.g.:</p>
 
-<div class="highlight highlight-go"><pre><span class="pl-k">import</span> (
+<div class="highlight highlight-source-go"><pre><span class="pl-k">import</span> (
     <span class="pl-s"><span class="pl-pds">"</span>github.com/RichardKnop/machinery/v1/signatures<span class="pl-pds">"</span></span>
     machinery <span class="pl-s"><span class="pl-pds">"</span>github.com/RichardKnop/machinery/v1<span class="pl-pds">"</span></span>
 )
@@ -533,7 +533,7 @@ fmt.<span class="pl-c1">Println</span>(result.<span class="pl-c1">Interface</spa
 
 <p><code>SendChord</code> returns <code>ChordAsyncResult</code> which follows AsyncResult's interface. So you can do a blocking call and wait for the result of the callback:</p>
 
-<div class="highlight highlight-go"><pre><span class="pl-smi">result</span>, <span class="pl-smi">err</span> <span class="pl-k">:=</span> chordAsyncResult.<span class="pl-c1">Get</span>()
+<div class="highlight highlight-source-go"><pre><span class="pl-smi">result</span>, <span class="pl-smi">err</span> <span class="pl-k">:=</span> chordAsyncResult.<span class="pl-c1">Get</span>()
 <span class="pl-k">if</span> err != <span class="pl-c1">nil</span> {
     <span class="pl-c">// getting result of a chord failed</span>
     <span class="pl-c">// do something with the error</span>
@@ -545,7 +545,7 @@ fmt.<span class="pl-c1">Println</span>(result.<span class="pl-c1">Interface</spa
 
 <p><code>Chain</code> is simply a set of tasks which will be executed one by one, each successful task triggering the next task in the chain. E.g.:</p>
 
-<div class="highlight highlight-go"><pre><span class="pl-k">import</span> (
+<div class="highlight highlight-source-go"><pre><span class="pl-k">import</span> (
     <span class="pl-s"><span class="pl-pds">"</span>github.com/RichardKnop/machinery/v1/signatures<span class="pl-pds">"</span></span>
     machinery <span class="pl-s"><span class="pl-pds">"</span>github.com/RichardKnop/machinery/v1<span class="pl-pds">"</span></span>
 )
@@ -607,7 +607,7 @@ fmt.<span class="pl-c1">Println</span>(result.<span class="pl-c1">Interface</spa
 
 <p><code>SendChain</code> returns <code>ChainAsyncResult</code> which follows AsyncResult's interface. So you can do a blocking call and wait for the result of the whole chain:</p>
 
-<div class="highlight highlight-go"><pre><span class="pl-smi">result</span>, <span class="pl-smi">err</span> <span class="pl-k">:=</span> chainAsyncResult.<span class="pl-c1">Get</span>()
+<div class="highlight highlight-source-go"><pre><span class="pl-smi">result</span>, <span class="pl-smi">err</span> <span class="pl-k">:=</span> chainAsyncResult.<span class="pl-c1">Get</span>()
 <span class="pl-k">if</span> err != <span class="pl-c1">nil</span> {
     <span class="pl-c">// getting result of a chain failed</span>
     <span class="pl-c">// do something with the error</span>
