@@ -101,8 +101,10 @@ func (amqpBroker *AMQPBroker) StopConsuming() {
 
 // Publish places a new message on the default queue
 func (amqpBroker *AMQPBroker) Publish(signature *signatures.TaskSignature) error {
-	_, channel, _, confirmsChan, err := amqpBroker.open()
+	conn, channel, _, confirmsChan, err := amqpBroker.open()
 	defer channel.Close()
+	defer conn.Close()
+
 	if err != nil {
 		return err
 	}
